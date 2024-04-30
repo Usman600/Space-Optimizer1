@@ -2,11 +2,16 @@ from flask import Flask, request, jsonify
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.spatial import distance
 import random
 import itertools
 import os
 import time
+import asyncio
+import aiohttp
 
+
+app = Flask(__name__)
 
 def create_Rectangle(length,width,place):
     rectangle = [[place for j in range(length)] for i in range(width)]
@@ -170,31 +175,36 @@ def add_arrays_with_rotation(arr1, arr2):
             i += 1
     return result
 
-def convert_to_3d_array(input_array):
-    unique_values = np.unique(input_array)
-    num_channels = len(unique_values)
-    height, width = input_array.shape
+def random_number(existing_colors, threshold=100):
+    while True:
+        red = np.random.randint(0, 256, dtype=int)
+        green = np.random.randint(0, 256, dtype=int)
+        blue = np.random.randint(0, 256, dtype=int)
+        new_color = [red, green, blue]
 
-    # Create a 3D array filled with zeros
-    image_3d_array = np.zeros((height, width, 3), dtype=np.uint8)
+        # Check if the new color is significantly different from existing colors
+        if all(distance.euclidean(new_color, existing_color) > threshold for existing_color in existing_colors):
+            break
+    return new_color
 
-    # Assign unique colors to each channel using a colormap
-    colormap = plt.cm.get_cmap("tab10", num_channels)  # Use 'tab10' colormap with num_channels
+def convert_to_3d_array(data):
+    unique_values = np.unique(data)
+    my_dict = {}  # Create an empty dictionary    
+    for i in unique_values:
+        temp = [100, 100, 100]
+        if i == 0:
+            temp = [255, 255, 255]
+        elif i > 0:
+            while True:
+                temp = random_number(list(my_dict.values()))
+                if tuple(temp) not in my_dict.values():
+                    break
+        my_dict[i] = list(temp)
 
-    # Ensure that 0 is always in white color
-    zero_color = np.array([255, 255, 255], dtype=np.uint8)
-    image_3d_array += (input_array == 0).reshape((height, width, 1)) * zero_color
+    converted_data = [[my_dict[j] for j in i] for i in data]
+    return converted_data
 
-    for d, value in enumerate(unique_values):
-        if value == 0:
-            continue  # Skip 0, already handled
-        color = np.array(colormap(d)[:3]) * 255  # Extract RGB values and scale to 0-255
-        mask = (input_array == value).reshape((height, width, 1))
-        image_3d_array = (image_3d_array.astype(np.float64) + mask.astype(np.float64) * color).astype(np.uint8)
-
-    return image_3d_array
-
-def Main(container_Dim, dataset, userID):
+async def Main(container_Dim, dataset, userID):
     container = create_Rectangle(container_Dim[0], container_Dim[1], 0)
     objects = [[]]
     selected = [[]]
@@ -212,18 +222,19 @@ def Main(container_Dim, dataset, userID):
     wasted_area = sum(row.count(0) for row in container)
     result_array = []
     if len(objects) > 10:
-        selected_index = [random.randint(0, len(objects)-1) for _ in range(random.randint(10, len(objects)))]
+        selected_index = [random.randint(0, len(objects)-1) for _ in range(random.randint(10, min(50,len(objects))))]
         objects = [objects[i] for i in selected_index]
         selected = [selected[i] for i in selected_index]
     for k, l in zip(objects, selected):
-        objects_temp = []  # Initialize objects_temp inside the outer loop
+        objects_temp = []  # Initialize objects_wasted_aretemp inside the outer loop
         selected_temp = []  # Initialize selected_temp inside the outer loop
+        
         for ob, sl in zip(itertools.permutations(k), itertools.permutations(l)):
             objects_temp.append(list(ob))
             selected_temp.append(list(sl))
 
             # Check if the limit is reached
-            if len(objects_temp) >= len(objects):
+            if len(objects_temp) >= len(k):
                 break
 
         for j in range(len(objects_temp)):
@@ -244,33 +255,61 @@ def Main(container_Dim, dataset, userID):
         if value == 0:
             continue
         color_index = np.where(np.unique(result_array) == value)[0][0]
-        color = matplotlib.colormaps.get_cmap("tab10", len(test))(color_index)
+        color = plt.cm.get_cmap("tab10", len(test))(color_index)
     
-    image_3d_array = convert_to_3d_array(np.array(result_array))
+    image_3d_array = np.array(convert_to_3d_array(result_array))
+    fig, ax = plt.subplots()
+    im = ax.imshow(image_3d_array, cmap=None, interpolation='nearest', aspect='auto', origin='lower')
 
-    plt.imshow(image_3d_array)
-    filename = f'\\images\\{userID}_image_{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.png'
+    # Set tick positions to cover the entire array
+    ax.set_xticks(np.arange(image_3d_array.shape[1]))
+    ax.set_yticks(np.arange(image_3d_array.shape[0]))
+
+    # Set tick labels at adjusted positions
+    tick_positions_x = np.arange(image_3d_array.shape[1] + 1) - 0.5  # Move labels towards the origin
+    tick_positions_y = np.arange(image_3d_array.shape[0] + 1) - 0.5  # Move labels towards the origin
+    ax.set_xticks(tick_positions_x)
+    ax.set_yticks(tick_positions_y)
+
+    # Optionally, you can add tick labels if needed
+    ax.set_xticklabels(tick_positions_x + 0.5)
+    ax.set_yticklabels(tick_positions_y + 0.5)
+    filename = f'\\Output_images\\{userID}_image_{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.png'
     try:
         plt.savefig(f"{os.getcwd()}{filename}")
         filename = filename.replace("\\", "/")
     except Exception as e:
         print(e)
     plt.close()
+    await asyncio.sleep(1)
+
     return filename, wasted_area, selected_shapes
 
+@app.route('/optimize', methods=['POST'])
+async def optimize():
+    try:
+        # Get the parameters from the request
+        data = request.json
+        dataList = data.get('dataList')
+        shapeArray = data.get('shapeArray')
+        userId = data.get('userID')
+        # Convert dataList and shapeArray to appropriate formats if needed
 
-result = [
-    {'ShapeName': 'Shape7', 'Shape_Type': 'Hexagon', 'ShapeWidth': 4, 'ShapeLength': 4, 'Quantity': 1},
-    {'ShapeName': 'Shape6', 'Shape_Type': 'Parallelogram', 'ShapeWidth': 4, 'ShapeLength': 3, 'Quantity': 1},
-    {'ShapeName': 'Shape4', 'Shape_Type': 'Triangle', 'ShapeWidth': 3, 'ShapeLength': 3, 'Quantity': 1},
-    {'ShapeName': 'Shape1', 'Shape_Type': 'Rectangle', 'ShapeWidth': 2, 'ShapeLength': 3, 'Quantity': 1},
-    {'ShapeName': 'Shape2', 'Shape_Type': 'Square', 'ShapeWidth': 2, 'ShapeLength': 2, 'Quantity': 5},
-    {'ShapeName': 'Shape3', 'Shape_Type': 'Square', 'ShapeWidth': 1, 'ShapeLength': 1, 'Quantity': 8 }
-    # Add more rows as needed
-]
+        # Call the Main function asynchronously
+        loop = asyncio.get_event_loop()
+        result = await loop.create_task(Main(shapeArray, dataList, str(userId)))
 
-start_time = time.time()
-Main([10, 7], result, "Admin_1")
-end_time = time.time()  # Record end time
-elapsed_time = end_time - start_time  # Calculate elapsed time
-print(elapsed_time)
+        # Return the output
+        response = {
+            'filename': result[0],
+            'wasted_area': result[1],
+            'selected_shapes': ", ".join(result[2])
+        }
+
+        return jsonify(response)
+
+    except Exception as e:
+        return jsonify({'error': str(e)})
+
+if __name__ == '__main__':
+    app.run(debug=True)
