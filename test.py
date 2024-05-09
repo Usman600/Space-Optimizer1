@@ -41,11 +41,6 @@ def create_Rhombus(length, place):
     triangle2 = triangle1[::-1]
     return triangle1 + triangle2[1:]
 
-def create_Hexagon(length, place):
-    triangle1 = create_Triangle(length, place)
-    triangle2 = triangle1[::-1]
-    rectangle = [[place for i in range(i + 2 * length - (i*2) - 1 + i)] for i in range(length -2)]
-    return triangle1 + rectangle + triangle2
 
 def resize_2d_array(arr, container):
     # Create a new 2D array with the desired size
