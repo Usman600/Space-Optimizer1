@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('Agg')
 from flask import Flask, request, jsonify
 from datetime import datetime
 import numpy as np
@@ -9,7 +11,6 @@ import os
 import time
 import asyncio
 import aiohttp
-
 
 app = Flask(__name__)
 
