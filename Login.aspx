@@ -11,39 +11,7 @@
         rel="stylesheet"
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script>
-        function showSuccessAlert() {
-            var successAlert = document.getElementById('successAlert');
-            successAlert.style.display = 'flex';
-            setTimeout(function () {
-                dismissAlert('successAlert', successAlert.querySelector('.okBtn'));
-            }, 3000);
-        }
-
-        function showErrorAlert() {
-            var errorAlert = document.getElementById('errorAlert');
-            errorAlert.style.display = 'flex';
-            setTimeout(function () {
-                dismissAlert('errorAlert', errorAlert.querySelector('.okBtn'));
-            }, 3000);
-        }
-
-        function dismissAlert(alertId, button) {
-            var alertElement = document.getElementById(alertId);
-            alertElement.style.display = 'none';
-            button.disabled = true;
-        }
-        function Toggle(visibleId, notVisible1Id, notVisible2Id) {
-            var visible = document.getElementById(visibleId);
-            var notVisible1 = document.getElementById(notVisible1Id);
-            var notVisible2 = document.getElementById(notVisible2Id);
-
-            visible.style.display = 'block';
-
-            notVisible1.style.display = 'none';
-            notVisible2.style.display = 'none';
-        }
-    </script>
+    
 </head>
 
 <body>
