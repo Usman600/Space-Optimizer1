@@ -92,8 +92,60 @@
 
             </asp:ContentPlaceHolder>
             <hr />
+           <footer>
+                <footer class="main-footer">
+                    <div class="container">
+                        <div class="footer-content">
+                            <div class="row">
+                                <div class="col-lg-4 col-md-6 col-sm-12 footer-column">
+                                    <div class="logo-widget footer-widget">
+                                        <figure class="logo-box">
+                                            <a href="#" class="fs-3 text-white fw-semibold">
+                                                <img src="" alt="" />Space Optimizer</a>
+                                        </figure>
+                                        <div class="text">
+                                            <p>
+                                                An efficient web tool for optimizing 2D box packing, ideal
+                    for logistics and storage management
+                                            </p>
+                                        </div>
+                                        <ul class="footer-social">
+                                            <li>
+                                                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fab fa-twitter"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fab fa-vimeo-v"></i></a>
+                                            </li>
+                                            <li>
+                                                <a href="#"><i class="fab fa-google-plus-g"></i></a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6 col-sm-12 offset-lg-2 footer-column">
+                                    <div class="service-widget footer-widget">
+                                        <div class="footer-title">Services</div>
+                                        <ul class="list">
+                                            <li><a href="#">Water Surve</a></li>
+                                            <li><a href="#">Education for all</a></li>
+                                            <li><a href="#">Food Serving</a></li>
+                                            <li><a href="#">Animal Saves</a></li>
+                                            <li><a href="#">Help Orphan</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </footer>
+            </footer>
+
  
         </div>
     </form>
+
 </body>
 </html>
