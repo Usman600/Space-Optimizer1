@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.spatial import distance
 import random
 import itertools
 import os
@@ -52,7 +53,7 @@ def resize_2d_array(arr, container):
             for j in range(min(len(arr[0]), new_columns)):
                 new_arr[i][j] = arr[i][j]
         return new_arr
-    return 0
+    return 0    
 
 def Outcomes(j, k, row, container):
     objects = []
@@ -170,34 +171,34 @@ def add_arrays_with_rotation(arr1, arr2):
             i += 1
     return result
 
-def convert_to_3d_array(input_array):
-    unique_values = np.unique(input_array)
-    num_channels = len(unique_values)
-    height, width = input_array.shape
+def random_number(existing_colors, threshold=100):
+    while True:
+        red = np.random.randint(0, 256, dtype=int)
+        green = np.random.randint(0, 256, dtype=int)
+        blue = np.random.randint(0, 256, dtype=int)
+        new_color = [red, green, blue]
 
-    # Create a 3D array filled with zeros
-    image_3d_array = np.zeros((height, width, 3), dtype=np.uint8)
+        # Check if the new color is significantly different from existing colors
+        if all(distance.euclidean(new_color, existing_color) > threshold for existing_color in existing_colors):
+            break
+    return new_color
 
-    # Assign unique colors to each channel using the "viridis" colormap
-    colormap = plt.cm.get_cmap("viridis", num_channels)  # Use 'viridis' colormap with num_channels
+def convert_to_3d_array(data):
+    unique_values = np.unique(data)
+    my_dict = {}  # Create an empty dictionary    
+    for i in unique_values:
+        temp = [100, 100, 100]
+        if i == 0:
+            temp = [255, 255, 255]
+        elif i > 0:
+            while True:
+                temp = random_number(list(my_dict.values()))
+                if tuple(temp) not in my_dict.values():
+                    break
+        my_dict[i] = list(temp)
 
-    # Ensure that 0 is always in white color
-    zero_color = np.array([255, 255, 255], dtype=np.uint8)
-    image_3d_array += (input_array == 0).reshape((height, width, 1)) * zero_color
-
-    # Handle the case where the number is -1 and reflect it as black
-    if -1 in unique_values:
-        black_color = np.array([0, 0, 0], dtype=np.uint8)
-        image_3d_array += (input_array == -1).reshape((height, width, 1)) * black_color
-
-    for d, value in enumerate(unique_values):
-        if value == 0 or value == -1:
-            continue  # Skip 0 and -1, already handled
-        color = np.array(colormap(d)[:3]) * 255  # Extract RGB values and scale to 0-255
-        mask = (input_array == value).reshape((height, width, 1))
-        image_3d_array = (image_3d_array.astype(np.float64) + mask.astype(np.float64) * color).astype(np.uint8)
-
-    return image_3d_array
+    converted_data = [[my_dict[j] for j in i] for i in data]
+    return converted_data
 
 def Main(container_Dim, dataset, userID):
     container = create_Rectangle(container_Dim[0], container_Dim[1], 0)
@@ -217,18 +218,19 @@ def Main(container_Dim, dataset, userID):
     wasted_area = sum(row.count(0) for row in container)
     result_array = []
     if len(objects) > 10:
-        selected_index = [random.randint(0, len(objects)-1) for _ in range(random.randint(10, len(objects)))]
+        selected_index = [random.randint(0, len(objects)-1) for _ in range(random.randint(10, min(50,len(objects))))]
         objects = [objects[i] for i in selected_index]
         selected = [selected[i] for i in selected_index]
     for k, l in zip(objects, selected):
-        objects_temp = []  # Initialize objects_temp inside the outer loop
+        objects_temp = []  # Initialize objects_wasted_aretemp inside the outer loop
         selected_temp = []  # Initialize selected_temp inside the outer loop
+        
         for ob, sl in zip(itertools.permutations(k), itertools.permutations(l)):
             objects_temp.append(list(ob))
             selected_temp.append(list(sl))
 
             # Check if the limit is reached
-            if len(objects_temp) >= len(objects):
+            if len(objects_temp) >= len(k):
                 break
 
         for j in range(len(objects_temp)):
@@ -251,9 +253,23 @@ def Main(container_Dim, dataset, userID):
         color_index = np.where(np.unique(result_array) == value)[0][0]
         color = plt.cm.get_cmap("tab10", len(test))(color_index)
     
-    image_3d_array = convert_to_3d_array(np.array(result_array))
+    image_3d_array = np.array(convert_to_3d_array(result_array))
+    fig, ax = plt.subplots()
+    im = ax.imshow(image_3d_array, cmap=None, interpolation='nearest', aspect='auto', origin='lower')
 
-    plt.imshow(image_3d_array)
+    # Set tick positions to cover the entire array
+    ax.set_xticks(np.arange(image_3d_array.shape[1]))
+    ax.set_yticks(np.arange(image_3d_array.shape[0]))
+
+    # Set tick labels at adjusted positions
+    tick_positions_x = np.arange(image_3d_array.shape[1] + 1) - 0.5  # Move labels towards the origin
+    tick_positions_y = np.arange(image_3d_array.shape[0] + 1) - 0.5  # Move labels towards the origin
+    ax.set_xticks(tick_positions_x)
+    ax.set_yticks(tick_positions_y)
+
+    # Optionally, you can add tick labels if needed
+    ax.set_xticklabels(tick_positions_x + 0.5)
+    ax.set_yticklabels(tick_positions_y + 0.5)
     filename = f'\\Output_images\\{userID}_image_{datetime.now().strftime("%Y-%m-%d_%H-%M-%S")}.png'
     try:
         plt.savefig(f"{os.getcwd()}{filename}")
@@ -261,6 +277,7 @@ def Main(container_Dim, dataset, userID):
     except Exception as e:
         print(e)
     plt.close()
+
     return filename, wasted_area, selected_shapes
 
 result = [
@@ -269,7 +286,9 @@ result = [
     {'ShapeName': 'Shape4', 'Shape_Type': 'Triangle', 'ShapeWidth': 3, 'ShapeLength': 3, 'Quantity': 1},
     {'ShapeName': 'Shape1', 'Shape_Type': 'Rectangle', 'ShapeWidth': 2, 'ShapeLength': 3, 'Quantity': 1},
     {'ShapeName': 'Shape2', 'Shape_Type': 'Square', 'ShapeWidth': 2, 'ShapeLength': 2, 'Quantity': 5},
-    {'ShapeName': 'Shape3', 'Shape_Type': 'Square', 'ShapeWidth': 1, 'ShapeLength': 1, 'Quantity': 8 }
+    {'ShapeName': 'Shape3', 'Shape_Type': 'Square', 'ShapeWidth': 1, 'ShapeLength': 1, 'Quantity': 8 },
+    {'ShapeName': 'Shape1', 'Shape_Type': 'Rectangle', 'ShapeWidth': 2, 'ShapeLength': 3, 'Quantity': 1},
+    {'ShapeName': 'Shape2', 'Shape_Type': 'Square', 'ShapeWidth': 2, 'ShapeLength': 2, 'Quantity': 2 }
     # Add more rows as needed
 ]
 
