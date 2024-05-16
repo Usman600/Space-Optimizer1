@@ -244,33 +244,6 @@ def Main(container_Dim, dataset, userID):
 
     return filename, wasted_area, selected_shapes
 
-def nearest_subset_sum_area(shapes, target):
-    areas = [int(shape['Area']) for shape in shapes]  # Convert to integers
-    n = len(areas)
-    target = int(target)  # Convert target to integer
-    dp = [False] * (target + 1)
-    dp[0] = True
-
-    nearest_sum = 0
-    for area in areas:
-        for j in range(target, area - 1, -1):
-            dp[j] |= dp[j - area]
-
-        for j in range(target, -1, -1):
-            if dp[j]:
-                nearest_sum = max(nearest_sum, j)
-
-    if nearest_sum == 0:
-        return None
-
-    subset = []
-    current_sum = nearest_sum
-    for shape in reversed(shapes):
-        if current_sum >= int(shape['Area']) and dp[current_sum - int(shape['Area'])]:
-            subset.append(shape)
-            current_sum -= int(shape['Area'])
-
-    return subset
 
 dataset = [
     {'ShapeName': 'Shape1', 'Shape_Type': 'Rectangle', 'ShapeWidth': 2, 'ShapeLength': 3, 'Quantity': 5, 'Area': 6},
