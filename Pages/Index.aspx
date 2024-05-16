@@ -286,28 +286,7 @@
           }
         }
 
-        if (flag == false) {
-          localObj.push(userObj);
-          localStorage.setItem("userObj", JSON.stringify(localObj));
-          var flipCheckbox = document.getElementById("flip");
-          flipCheckbox.checked = !flipCheckbox.checked; // Toggle the state
-
-          var cover = document.querySelector(".container .cover");
-          var rotation = flipCheckbox.checked ? -180 : 0;
-
-          cover.style.transform = `rotateY(${rotation}deg)`;
-        }
-      } else {
-        localStorage.setItem("userObj", JSON.stringify([userObj]));
-        var flipCheckbox = document.getElementById("flip");
-        flipCheckbox.checked = !flipCheckbox.checked; // Toggle the state
-
-        var cover = document.querySelector(".container .cover");
-        var rotation = flipCheckbox.checked ? -180 : 0;
-
-        cover.style.transform = `rotateY(${rotation}deg)`;
-      }
-    }
+        
 
     function login() {
       var emailLogin = document.getElementById("emailLogin");
