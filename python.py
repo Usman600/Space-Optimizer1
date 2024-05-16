@@ -1,6 +1,6 @@
 import matplotlib
 matplotlib.use('Agg')
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify #for api
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
