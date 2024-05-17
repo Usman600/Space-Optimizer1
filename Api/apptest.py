@@ -9,7 +9,6 @@ import itertools
 import os
 import time
 import asyncio
-import aiohttp
 
 app = Flask(__name__)
 
