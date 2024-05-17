@@ -285,8 +285,7 @@
             alert("Email already exists");
           }
         }
-
-        if (flag == false) {
+      if (flag == false) {
           localObj.push(userObj);
           localStorage.setItem("userObj", JSON.stringify(localObj));
           var flipCheckbox = document.getElementById("flip");
@@ -297,7 +296,9 @@
 
           cover.style.transform = `rotateY(${rotation}deg)`;
         }
-      } else {
+      } 
+
+      else {
         localStorage.setItem("userObj", JSON.stringify([userObj]));
         var flipCheckbox = document.getElementById("flip");
         flipCheckbox.checked = !flipCheckbox.checked; // Toggle the state
@@ -308,6 +309,7 @@
         cover.style.transform = `rotateY(${rotation}deg)`;
       }
     }
+        
 
     function login() {
       var emailLogin = document.getElementById("emailLogin");
