@@ -4,13 +4,13 @@ from flask import Flask, request, jsonify #for api
 from datetime import datetime
 import numpy as np
 import matplotlib.pyplot as plt
-from scipy.spatial import distance
+from scipy.spatial import distance # type: ignore
 import random
 import itertools
 import os
 import time
 import asyncio
-import aiohttp
+import aiohttp # type: ignore
 
 def create_Rectangle(length,width,place):
     rectangle = np.full((width, length), place)
