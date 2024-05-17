@@ -76,23 +76,23 @@ def shift_matrix_down(matrix):
         return shifted_matrix_np
     return None
 
-def add_arrays_with_rotation(objects, container):
-    local_object = objects
+def add_arrays_with_rotation(datetime, container):
+    local_object = datetime
     while True:
-        mask = (container == 0) | (objects == 0)
+        mask = (container == 0) | (datetime == 0)
         if np.all(mask):
             break
-        temp = rotate_matrix_right(objects)
+        temp = rotate_matrix_right(datetime)
         if temp is not None:
-                objects = temp
+                datetime = temp
         else:
             temp = shift_matrix_down(local_object)
             local_object = temp
             if temp is not None:
-                objects = temp
+                datetime = temp
             else:
                 return container
-    return container + objects
+    return container + datetime
 
 def random_number(existing_colors, threshold=100):
     if existing_colors == []:
