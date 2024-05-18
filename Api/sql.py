@@ -2,7 +2,7 @@ import base64
 from PIL import Image
 from io import BytesIO
 import numpy as np
-import pyodbc
+import pyodbc # type: ignore
 
 # Establish a connection to your SQLite database using pyodbc
 connection_string = 'Driver={SQL Server};Server=DESKTOP-ACEO563\SQLEXPRESS;Database=milahow_Space_Optimizer;Trusted_Connection=yes;'
