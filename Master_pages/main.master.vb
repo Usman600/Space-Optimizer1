@@ -11,6 +11,12 @@ Partial Class MasterPage
             btnLogin.Text = "Login"
         End If
     End Sub
-    
+    Private Sub btnLogin_Click(sender As Object, e As EventArgs) Handles btnLogin.Click
+        If btnLogin.Text = "Logout" Then
+            Session.RemoveAll()
+        End If
+        Response.Redirect("~/Pages/Login.aspx")
+    End Sub
+
     
 End Class
