@@ -25,4 +25,20 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Space_Optimizer", ".", "{2C
 		DefaultWebSiteLanguage = "Visual Basic"
 	EndProjectSection
 EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2C646512-37B3-4260-BD4C-18B6382FAED2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C646512-37B3-4260-BD4C-18B6382FAED2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2E66C1E2-7894-48CB-B9C3-D0B2A5C15E07}
+	EndGlobalSection
+EndGlobal
+
 
