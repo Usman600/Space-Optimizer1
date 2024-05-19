@@ -12,32 +12,7 @@ import time
 import asyncio
 import aiohttp # type: ignore
 
-def create_Rectangle(length,width,place):
-    rectangle = np.full((width, length), place)
-    return rectangle
 
-def create_Triangle(width,place):
-    triangle = create_Rectangle(width*2-1,width,0)
-    for i in range(width):
-        for j in range((width - i - 1), (width - i - 1)+(2 * i + 1)):
-            triangle[i][j] = place
-    return triangle
-
-def create_Parallelogram(length,width,place):
-    parallelogram = create_Rectangle(length+width-1,width,0)
-    for i in range(width):
-        for j in range((width - i -1), (width - i -1) + (length)):
-            parallelogram[i][j] = place
-    return parallelogram
-
-def create_Rhombus(length, place):
-    triangle = create_Triangle(length, place)
-    return np.concatenate((triangle, np.rot90(triangle[:-1], k=2)), axis=0)
-
-def create_Hexagon(length, place):
-    triangle = create_Triangle(length, place)
-    rectangle = create_Rectangle(2 * length - 1,length-1,place)
-    return np.concatenate((triangle, rectangle, np.rot90(triangle[:-1], k=2)), axis=0)
 
 def resize_2d_array(objects, container):
     if objects.shape[0] <= container.shape[0] and objects.shape[1] <= container.shape[1]:
