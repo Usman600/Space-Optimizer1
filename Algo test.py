@@ -54,6 +54,68 @@ def resize_2d_array(arr, container):
         return new_arr
     return 0
 
+def Outcomes(j, k, row, container):
+    objects = []
+    selected = []
+    if row['Shape_Type'] == "Rectangle":
+        rectangle = create_Rectangle(row['ShapeLength'], row['ShapeWidth'], len(j) + 1)
+        temp = resize_2d_array(rectangle, container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+        temp = resize_2d_array(list(map(list, zip(*rectangle))), container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+    if row['Shape_Type'] == "Square":
+        square = create_Rectangle(row['ShapeLength'], row['ShapeLength'], len(j) + 1)
+        temp = resize_2d_array(square, container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+    if row['Shape_Type'] == "Triangle":
+        triangle = create_Triangle(row['ShapeLength'], len(j) + 1)
+        temp = resize_2d_array(triangle, container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+            objects.append(j +[resize_2d_array(triangle[::-1], container)])
+            selected.append(k + [row['ShapeName']])
+        temp = resize_2d_array(list(map(list, zip(*triangle))), container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+        temp = resize_2d_array(list(map(list, zip(*triangle[::-1]))), container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+    if row['Shape_Type'] == "Parallelogram":
+        parallelogram = create_Parallelogram(row['ShapeLength'], row['ShapeWidth'], len(j) + 1)
+        temp = resize_2d_array(parallelogram, container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+        temp = resize_2d_array(list(map(list, zip(*parallelogram))), container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+    if row['Shape_Type'] == "Rhombus":
+        rhombus = create_Parallelogram(row['ShapeLength'], len(j) + 1)
+        temp = resize_2d_array(rhombus, container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+    if row['Shape_Type'] == "Hexagon":
+        hexagon = create_Hexagon(row['ShapeLength'], len(j) + 1)
+        temp = resize_2d_array(hexagon, container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+        temp = resize_2d_array(list(map(list, zip(*hexagon))), container)
+        if temp != 0:
+            objects.append(j + [temp])
+            selected.append(k + [row['ShapeName']])
+    return objects, selected
 
 def rotate_matrix_right(matrix):
     if all(row[-1] == 0 for row in matrix):
