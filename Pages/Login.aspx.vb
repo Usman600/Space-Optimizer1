@@ -136,13 +136,7 @@ Partial Class Pages_Login
         End If
         ClearFields()
     End Sub
-
-    Private Sub btnLoginToggle_Click(sender As Object, e As EventArgs) Handles btnLoginToggle.Click
-        DivReset.Visible = False
-        DivLogin.Visible = True
-        DivSignIn.Visible = False
-        ClearFields()
-    End Sub
+    
 #End Region
 #Region "Forgot Password"
     Private Sub btnLoginToggleF_Click(sender As Object, e As EventArgs) Handles btnLoginToggleF.Click
