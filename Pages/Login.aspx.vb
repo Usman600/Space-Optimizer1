@@ -52,6 +52,12 @@ Partial Class Pages_Login
         DivSignIn.Visible = False
         ClearFields()
     End Sub
+    Private Sub btnSignInToggle_Click(sender As Object, e As EventArgs) Handles btnSignInToggle.Click
+        DivReset.Visible = False
+        DivLogin.Visible = False
+        DivSignIn.Visible = True
+        ClearFields()
+    End Sub
 
     
 #End Region
