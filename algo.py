@@ -39,7 +39,6 @@ def create_Hexagon(length, place):
     rectangle = create_Rectangle(2 * length - 1,length-1,place)
     return np.concatenate((triangle, rectangle, np.rot90(triangle[:-1], k=2)), axis=0)
 
-
 def resize_2d_array(objects, container):
     if objects.shape[0] <= container.shape[0] and objects.shape[1] <= container.shape[1]:
         container = np.copy(container)
@@ -292,3 +291,8 @@ target_sum = 10* 7
 
 result = nearest_subset_sum_area(result, target_sum)
 
+start_time = time.time()
+Main([10, 7], result, "Admin_1")
+end_time = time.time()  # Record end time
+elapsed_time = end_time - start_time  # Calculate elapsed time
+print(elapsed_time)
