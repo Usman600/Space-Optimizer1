@@ -291,8 +291,3 @@ target_sum = 10* 7
 
 result = nearest_subset_sum_area(result, target_sum)
 
-start_time = time.time()
-Main([10, 7], result, "Admin_1")
-end_time = time.time()  # Record end time
-elapsed_time = end_time - start_time  # Calculate elapsed time
-print(elapsed_time)
