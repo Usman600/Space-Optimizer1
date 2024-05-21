@@ -61,13 +61,7 @@ Partial Class Pages_Login
     End Sub
 #End Region
 
-#Region "button Signup"
-    Function ValidatePassword(ByVal pwd As String,
-        Optional ByVal minLength As Integer = 8,
-        Optional ByVal numUpper As Integer = 1,
-        Optional ByVal numLower As Integer = 1,
-        Optional ByVal numNumbers As Integer = 1,
-        Optional ByVal numSpecial As Integer = 1) As Boolean
+
 
         ' Replace [A-Z] with \p{Lu}, to allow for Unicode uppercase letters.
         Dim upper As New System.Text.RegularExpressions.Regex("[A-Z]")
