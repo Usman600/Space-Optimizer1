@@ -39,6 +39,7 @@ def create_Hexagon(length, place):
     rectangle = create_Rectangle(2 * length - 1,length-1,place)
     return np.concatenate((triangle, rectangle, np.rot90(triangle[:-1], k=2)), axis=0)
 
+
 def resize_2d_array(objects, container):
     if objects.shape[0] <= container.shape[0] and objects.shape[1] <= container.shape[1]:
         container = np.copy(container)

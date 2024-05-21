@@ -17,5 +17,6 @@ Partial Class MasterPage
         End If
         Response.Redirect("~/Pages/Login.aspx")
     End Sub
+
     
 End Class
