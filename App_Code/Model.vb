@@ -9,56 +9,7 @@ Imports System.Collections
 Imports System.Net.Mail
 Imports System.Net
 
-Public Class Model
-    'Private ReadOnly connectionString As String = "Data Source=ZAID-QASIM;Initial Catalog=milahow_Space_Optimizer;Integrated Security=True"
-    Private ReadOnly connectionString As String = "Data Source=DESKTOP-ACEO563\SQLEXPRESS;Initial Catalog=Space_Optimizer_test;Integrated Security=True"
-    'Private ReadOnly connectionString As String = "Data Source=sql.bsite.net\MSSQL2016;Initial Catalog=milahow_Space_Optimizer;User Id=milahow_Space_Optimizer;Password=watrf107milahow;"
 
-    Private ReadOnly connection As SqlConnection
-    Private ReadOnly key As String = "0123456789ABCDEF"
-    Private ReadOnly iv As String = "0123456789ABCDEF"
-    Dim senderEmail As String = "zaidqasim1234+SpaceOptimzer@gmail.com"
-
-    Public Sub New()
-        If connection Is Nothing Then
-            connection = New SqlConnection(connectionString)
-            Try
-                connection.Open()
-            Catch ex As Exception
-
-            End Try
-        End If
-    End Sub
-
-    Public Function ExecuteSP(StoredProc As String, values As Hashtable) As DataSet
-        Dim ds As New DataSet
-        Dim dataAdatpter As SqlDataAdapter
-        Dim command As New SqlCommand
-        command.Connection = connection
-        command.CommandTimeout = 3600
-        command.CommandType = CommandType.StoredProcedure
-        command.CommandText = StoredProc
-
-        ' Add parameters using the foreach loop
-        For Each key As Object In values.Keys
-            command.Parameters.AddWithValue("@P_" + key.ToString(), values(key).ToString())
-        Next
-
-        Try
-            dataAdatpter = New SqlDataAdapter(command)
-            dataAdatpter.Fill(ds)
-        Catch ex As Exception
-            Dim e = ex
-        End Try
-
-        Return ds
-    End Function
-
-    Public Sub FillCombo(dt As DataTable, ByRef combo As RadComboBox)
-        For Each row As DataRow In dt.Rows
-            combo.Items.Add(New RadComboBoxItem(row(1), row(0)))
-        Next
-    End Sub
 
     Public Function Encrypt(dataToEncrypt As String) As String
         ' Convert the key and IV to byte arrays
