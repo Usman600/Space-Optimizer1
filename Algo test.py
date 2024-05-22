@@ -12,6 +12,23 @@ def create_Rectangle(length,width,place):
     rectangle = [[place for j in range(length)] for i in range(width)]
     return rectangle
 
+def create_Triangle(width,place):
+    triangle = []
+    for i in range(width):
+        triangle.append([])
+        triangle[-1] = [0 for j in range(width - i - 1)]
+        triangle[-1] += [place for j in range(2 * i + 1)]
+        triangle[-1] += [0 for j in range(width - i - 1)]
+    return triangle
+
+def create_Parallelogram(length,width,place): 
+    parallelogram = []
+    for i in range(width):
+        parallelogram.append([])
+        parallelogram[-1] = [0 for i in range(width - i -1)]
+        parallelogram[-1] += [place for i in range(length)]
+        parallelogram[-1] += [0 for i in range(i)]
+    return parallelogram
 
 
 def create_Rhombus(length, place):
