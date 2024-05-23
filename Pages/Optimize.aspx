@@ -1,4 +1,4 @@
-﻿<%@ Page Title="" Language="VB" MasterPageFile="~/Master_pages/Main.master" AutoEventWireup="false" CodeFile="~/Pages/Optimize.aspx.vb" Inherits="Pages_Optimize" %>
+<%@ Page Title="" Language="VB" MasterPageFile="~/Master_pages/Main.master" AutoEventWireup="false" CodeFile="~/Pages/Optimize.aspx.vb" Inherits="Pages_Optimize" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="Server">
 </asp:Content>
@@ -50,15 +50,13 @@
             border-color: #f5c6cb;
         }
     </style>
-<script src="../Scripts/Alert.js"></script>
+    <script src="../Scripts/Alert.js"></script>
     <asp:UpdatePanel runat="server">
         <ContentTemplate runat="server">
             <asp:ScriptManager runat="server"></asp:ScriptManager>
             <section class="container mb-5">
                 <div class="row justify-content-center contact gap-5 gap-lg-0">
                     <div class="col-8 col-md-12 pt-5 d-flex flex-column align-items-center position-relative shadow mt-5 h-custom" style="height: fit-content;">
-
-   
 
                         <div class="alert" id="successAlert" runat="server" style="display: none;">
                             <div class="alertBox alert-success">
