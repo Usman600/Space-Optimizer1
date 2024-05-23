@@ -1,4 +1,4 @@
-﻿<%@ Master Language="VB" AutoEventWireup="true" CodeFile="Site.Mobile.master.vb" Inherits="Site_Mobile" %>
+<%@ Master Language="VB" AutoEventWireup="true" CodeFile="Site.Mobile.master.vb" Inherits="Site_Mobile" %>
 
 <%@ Register Src="~/ViewSwitcher.ascx" TagPrefix="friendlyUrls" TagName="ViewSwitcher" %>
 
