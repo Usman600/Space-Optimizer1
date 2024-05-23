@@ -1,4 +1,4 @@
-﻿Imports Telerik.Web.UI
+Imports Telerik.Web.UI
 Imports System.Data
 Imports System.Net.Http
 Imports Newtonsoft.Json
